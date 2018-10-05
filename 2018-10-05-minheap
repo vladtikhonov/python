@@ -1,0 +1,121 @@
+class MinHeap:
+  def __init__(self):
+    self.values = []
+
+  def add(self, value):
+    print("Adding: {} to {}".format(value, self.values))
+    self.values.append(value)
+    self.heapify_up()
+
+  def retrieve_min(self):
+    print("Removing: {} from {}".format(self.values[0], self.values))
+    self.values[0] = self.values.pop()
+    print("Last element moved to first: {}".format(self.values))
+    self.heapify_down()
+
+  def heapify_up(self):
+    print("START HEAP RESTORATION! " + str(self.values))
+    heap = self.values
+    item_index = len(heap) - 1
+    while True:
+      item_value = heap[item_index]
+      parent_index = (item_index - 1) // 2
+      parent_value = heap[parent_index]      
+      if item_value < parent_value:
+        # if smaller then parent than swap
+        print("Swapping a smaller {} with parent {}".format(item_value, parent_value))
+        heap[parent_index] = item_value
+        heap[item_index] = parent_value
+        item_index = parent_index
+      else:
+        # if bigger then finish
+        break
+    self.values = heap
+    print("HEAP RESTORED! " + str(self.values) + "\n")
+
+  def heapify_down(self):
+    print("START HEAP RESTORATION! " + str(self.values))
+    heap = self.values
+    item_index = 0
+    while True:
+      item_value = heap[item_index]
+      child1_index = item_index * 2 + 1
+      child2_index = item_index * 2 + 2
+      if child1_index < len(heap):
+        child1_value = heap[child1_index]
+      else:
+        break
+      if child2_index < len(heap):      
+        child2_value = heap[child2_index]
+      else:
+        child2_value = child1_value + 1
+      
+      # if item smaller than child1
+      if item_value < child1_value:
+        print("Parent {} is smaller than left child {}".format(item_value, child1_value))
+        # and smaller than child2
+        if item_value < child2_value:
+          print("Parent {} is smaller than right child {}".format(item_value, child2_value))
+          # then finish
+          break
+        # but bigger than child2
+        elif item_value > child2_value:
+          # then swap with child2
+          print("Swapping a bigger parent {} with right child {}".format(item_value, child2_value))
+          heap[child2_index] = item_value
+          heap[item_index] = child2_value
+          item_index = child2_index
+      
+      # if item bigger than child1
+      elif item_value > child1_value:
+        print("Parent {} is bigger than left child {}".format(item_value, child1_value))
+        # and smaller than child2
+        if item_value < child2_value:
+          # then swap with child1
+          print("Swapping a bigger parent {} with left child {}".format(item_value, child1_value))
+          heap[child1_index] = item_value
+          heap[item_index] = child1_value
+          item_index = child1_index
+        # and bigger than child2
+        elif item_value > child2_value:
+          print("Parent {} is bigger than right child {}".format(item_value, child2_value))
+          # then compare children - if child1 smaller or equal
+          if child1_value <= child2_value:
+            # then swap with child1
+            print("Swapping a bigger parent {} with left child {}".format(item_value, child1_value))
+            heap[child1_index] = item_value
+            heap[item_index] = child1_value
+            item_index = child1_index
+          # else means that child2 is smaller
+          else:
+            # so swap with child2
+            print("Swapping a bigger parent {} with right child {}".format(item_value, child2_value))
+            heap[child2_index] = item_value
+            heap[item_index] = child2_value
+            item_index = child2_index
+    self.values = heap
+    print("HEAP RESTORED! " + str(self.values) + "\n")
+
+test_heap = MinHeap()
+test_heap.add(1)
+test_heap.add(123)
+test_heap.add(45)
+test_heap.add(90)
+test_heap.add(54)
+test_heap.add(234)
+test_heap.add(28)
+test_heap.add(50)
+test_heap.add(58678)
+test_heap.add(4567)
+test_heap.add(456)
+test_heap.add(2)
+test_heap.retrieve_min()
+test_heap.retrieve_min()
+test_heap.retrieve_min()
+test_heap.retrieve_min()
+test_heap.retrieve_min()
+test_heap.retrieve_min()
+test_heap.retrieve_min()
+test_heap.retrieve_min()
+test_heap.retrieve_min()
+test_heap.retrieve_min()
