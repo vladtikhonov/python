@@ -1,0 +1,82 @@
+class Vertex:
+  def __init__(self, data):
+    self.data = data
+    self.edges_to = []
+    self.edges_weights = []
+
+  def __repr__(self):
+    return str(self.data)
+
+  def add_edge(self, new_edge_destination, weight=0):
+    self.edges_to.append(new_edge_destination)
+    self.edges_weights.append(weight)
+    new_edge_destination.edges_to.append(self)
+    new_edge_destination.edges_weights.append(weight)
+
+class Graph:
+  def __init__(self, vertices=[], directed=False):
+    self.directed = directed
+    self.vertices = vertices
+    self.count = 0
+
+  def add_vertice(self, vertice):
+    self.vertices.append(vertice)
+    self.count += 1
+
+  def add_edge(self, vertice, new_edge_destination, weight=0):
+    if vertice in self.vertices and new_edge_destination in self.vertices:
+      vertice.add_edge(new_edge_destination, weight)
+
+  def find_path(self, start, finish):
+    if not start in self.vertices or not finish in self.vertices:
+      print("Graph does not contain at least one of these vertices")
+      return
+    if start == finish:
+      print("Start is the finish!")
+    path = [start]
+    visited = [start]
+    final_path = self.wander(start, finish, path, visited)
+    #print(final_path)
+    if final_path and finish in final_path:
+      print("Path found: " + str(final_path))
+    else:
+      print("Path was not found")
+
+  def wander(self, start, finish, path, visited):
+    for here in start.edges_to:
+      if here in visited:
+        continue
+      path.append(here)
+      if finish in here.edges_to:
+        path.append(finish)
+        return path
+      else:
+        visited.append(here)
+        self.wander(here, finish, path, visited)
+        if finish in path:
+          return path
+        else:
+          path.pop()
+
+a = Vertex("A")
+b = Vertex("B")
+c = Vertex("C")
+d = Vertex("D")
+e = Vertex("E")
+f = Vertex("F")
+g = Vertex("G")
+h = Vertex("H")
+
+a.add_edge(b)
+a.add_edge(c)
+b.add_edge(c)
+c.add_edge(d)
+d.add_edge(e)
+d.add_edge(f)
+f.add_edge(g)
+f.add_edge(h)
+
+print(b.edges_to)
+
+test_graph = Graph([a, b, c, d, e, f, g, h])
+test_graph.find_path(a, h)
